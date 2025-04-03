@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { ChangeEvent } from 'react';
 import './App.css'
 import { getRandomDogImage } from './services/add-dog.service';
 import { DogResponse } from './services/model/dogs';
@@ -17,11 +18,11 @@ function App() {
   const [selectBreed, setSelectBreed] = useState<string>('');
 
   useEffect(() => {
-    getAllBreeds().then(setBreeds);
+    getAllBreeds().then(setBreeds); // funcion que devuelve una promesa, cuando la promesa se cumple se llama a setBreeds, con el then cuando la promesa se resuelve lo hace de manera asincrona
   }, []);
 
 
-  const handleBreedChanges = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleBreedChanges = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectBreed(event.target.value);
   }
 
@@ -79,7 +80,6 @@ function App() {
 
   return (
     <>
-
       <div className='buttons add-button'>
         <select value={selectBreed} onChange={handleBreedChanges}>
           <option value="">Raza</option>
