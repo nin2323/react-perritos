@@ -40,7 +40,7 @@ function App() {
       const dog = await Promise.all(  // con promise nos aseguramos que todas las promesas funcionen y si una falla se devuleva un error
         Array.from({ length: 5 }, () => getRandomDogImage(''))  // crear un array con 5 esapcios vacios y hacemos la llamada a getRandomImage
       );
-      const validDogs = dog.filter((dog): dog is DogResponse => Boolean(dog));  // recorremos los elementos del array y eliminamos los valores null y undefined al pasar dog a tipo booleano, pasamos dog a tipo DogResponse para acceder a sus valores
+      const validDogs = dog.filter((dog): dog is DogResponse => Boolean(dog));  // recorremos los elementos del array y le decimos que dog puede tener los valores de DogResponse, pasamos dog a tipo booleano para que devuleva false si los valores son null o undefined y evitamos errores de la api
 
       setDogList([
         ...dogList,
@@ -54,7 +54,11 @@ function App() {
 
   return (
     <>
+
       <div className='buttons add-button'>
+        <select name="breeds" id="breeds-pickers">
+          <option value="">Raza...</option>
+        </select>
         <button onClick={handleAddDog}>Añadir al final</button>
         <button onClick={handleAddFirstDog}>Añadir al principio</button>
         <button onClick={handleAddFiveDogs}>Añadir 5 perritos</button>
