@@ -32,3 +32,15 @@ export async function getRandomDogImage(breed: string): Promise<DogResponse | un
 
     return undefined;
   }
+
+  export const getAllBreeds = async (): Promise<string[]> => {
+    try {
+      const response = await fetch("https://dog.ceo/api/breeds/list/all");
+      const data = await response.json();
+      return Object.keys(data.message); // Convertimos el objeto en un array de nombres de razas
+    } 
+    catch (error) {
+      console.error("Error fetching breeds:", error);
+      return [];
+    }
+  };
