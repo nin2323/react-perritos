@@ -9,6 +9,7 @@ interface Dog {
   imgUrl: string;
   countLike: number;
   countDislike: number;
+  breed: string
 }
 
 
@@ -16,15 +17,30 @@ function App() {
   const [dogList, setDogList] = useState<Dog[]>([]); 
   const [breeds, setBreeds] = useState<string[]>([]);
   const [selectBreed, setSelectBreed] = useState<string>('');
+  const [filterBreed, setFilterBreed] = useState<string>('');
+  const [filteredDogs, setFilteredDogs] = useState<Dog[]>([]);
 
   useEffect(() => {
     getAllBreeds().then(setBreeds); // funcion que devuelve una promesa, cuando la promesa se cumple se llama a setBreeds, con el then cuando la promesa se resuelve lo hace de manera asincrona
   }, []);
 
 
-  const handleBreedChanges = (event: ChangeEvent<HTMLSelectElement>) => {
-    setSelectBreed(event.target.value);
-  }
+    const handleBreedChanges = (event: ChangeEvent<HTMLSelectElement>) => {
+      setSelectBreed(event.target.value);
+    }
+
+    const handleFilterChanges = (event: ChangeEvent<HTMLSelectElement>) => {
+      const selectedBreed = event.target.value;
+      setFilterBreed(selectedBreed); // Cambiar la raza seleccionada para filtrar
+  
+      // Filtrar los perros en el momento que el usuario selecciona una raza
+      if (selectedBreed === '') {
+        setFilteredDogs([]); // Si no hay raza seleccionada, mostrar todos
+      } else {
+        const filtered = dogList.filter(dog => dog.breed === selectedBreed);
+        setFilteredDogs(filtered);
+      }
+    };
 
     const handleAddDog = async () => {
       if (selectBreed === '') {
@@ -35,8 +51,9 @@ function App() {
       if (dog) {
         setDogList([...dogList, {    
           imgUrl: dog?.imgUrl,
-          countLike: dog.likeCount,
-          countDislike: dog.dislikeCount
+          countLike: 0,
+          countDislike: 0,
+          breed: selectBreed
       }
       ]);
     }
@@ -51,8 +68,9 @@ function App() {
       if (dog) {
         setDogList([ {    
           imgUrl: dog?.imgUrl,
-          countLike: dog.likeCount,
-          countDislike: dog.dislikeCount
+          countLike: 0,
+          countDislike: 0,
+          breed: selectBreed
       }, ...dogList, 
       ]);
     }
@@ -72,15 +90,35 @@ function App() {
         ...dogList,
         ...validDogs.map(dog => ({
           imgUrl: dog.imgUrl,
-          countLike: dog.likeCount,
-          countDislike: dog.dislikeCount 
+          countLike: 0,
+          countDislike: 0,
+          breed: selectBreed
         })) 
      ])
     }
 
+      const handleAddLike = (index: number) => {
+        setDogList((prevDogs) =>
+          prevDogs.map((dog, i) =>
+            i === index ? { ...dog, countLike: dog.countLike + 1 } : dog
+          )
+        );
+      };
+
+      const handleAddDislike = (index: number) => {
+        setDogList((prevDogs) => 
+          prevDogs.map((dog, i) => 
+            i === index ? { ...dog, countDislike: dog.countDislike + 1} : dog
+        )
+       )
+      };
+
+
+      const dogsToDisplay = filterBreed ? filteredDogs : dogList;
+
   return (
     <>
-      <div className='buttons add-button'>
+      <div className="buttons add-button">
         <select value={selectBreed} onChange={handleBreedChanges}>
           <option value="">Raza</option>
           {breeds.map((breed) => (
@@ -91,23 +129,37 @@ function App() {
         <button onClick={handleAddFirstDog}>Añadir al principio</button>
         <button onClick={handleAddFiveDogs}>Añadir 5 perritos</button>
       </div>
-      <div className='card-list'>
-        {dogList.map((dog) => {
-          return  <div className='card-dog'>
-          <img src={dog.imgUrl} alt="" />
-          <div className='container-count'>
-            <span className='count-like'>{dog.countLike} ❤️</span>
-            <span className='count-dislike'>{dog.countDislike} 🤮</span>
-          </div>
-          <div className='buttons'>
-            <button className='button-like'>Like</button>
-            <button className='button-dislike'> Dislike</button>
-          </div>
-        </div>
-        })}
+      <div className="buttons buttons-filter">
+      <select value={filterBreed} onChange={handleFilterChanges}>
+          <option value=""> Filtrar por Raza</option>
+          {breeds.map((breed) => (
+            <option key={breed} value={breed}>{breed}</option>
+          ))}
+        </select>
+        <button>Filtrar por likes</button>
+        <button>Filtrar por dislikes</button>
+      </div>
+      <div className="card-list">
+        {dogsToDisplay.length === 0 ? (
+          <p></p>
+        ) : (
+          dogsToDisplay.map((dog, index) => (
+            <div className="card-dog" key={index}>
+              <img src={dog.imgUrl} alt="" />
+              <div className="container-count">
+                <span className="count-like">{dog.countLike} ❤️</span>
+                <span className="count-dislike">{dog.countDislike} 🤮</span>
+              </div>
+              <div className="buttons">
+                <button className="button-like" onClick={() => handleAddLike(index)}>Like</button>
+                <button className="button-dislike" onClick={() => handleAddDislike(index)}>Dislike</button>
+              </div>
+            </div>
+          ))
+        )}
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -45,5 +45,10 @@ img {
 .add-button {
   padding-top: 34px;
   margin-bottom: 24px;
+  border-radius: 8px;
+}
+
+.buttons-filter{
+  margin-bottom: 24px;
 }
 
