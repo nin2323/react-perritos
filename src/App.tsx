@@ -19,6 +19,8 @@ function App() {
   const [selectBreed, setSelectBreed] = useState<string>('');
   const [filterBreed, setFilterBreed] = useState<string>('');
   const [filteredDogs, setFilteredDogs] = useState<Dog[]>([]);
+  const [filterByLikes, setFilterByLikes] = useState(false);
+  const [filterByDislikes, setFilterByDislikes] = useState(false);
 
   useEffect(() => {
     getAllBreeds().then(setBreeds); // funcion que devuelve una promesa, cuando la promesa se cumple se llama a setBreeds, con el then cuando la promesa se resuelve lo hace de manera asincrona
@@ -113,8 +115,25 @@ function App() {
        )
       };
 
+      const dogsToDisplay = (() => {
+        let dogs = filterBreed ? filteredDogs : dogList;
+        if (filterByLikes) {
+          dogs = dogs.filter(dog => dog.countLike > 0);
+        } else if (filterByDislikes) {
+          dogs = dogs.filter(dog => dog.countDislike > 0);
+        }
+        return dogs;
+      })();
 
-      const dogsToDisplay = filterBreed ? filteredDogs : dogList;
+
+      const handleFilterLikes = () => {
+        setFilterByLikes(prev => !prev)
+      };
+
+      const handleFilterDislikes = () => {
+        setFilterByDislikes(prev => !prev)
+      }
+
 
   return (
     <>
@@ -136,8 +155,8 @@ function App() {
             <option key={breed} value={breed}>{breed}</option>
           ))}
         </select>
-        <button>Filtrar por likes</button>
-        <button>Filtrar por dislikes</button>
+        <button onClick={handleFilterLikes}>{filterByLikes ? 'Mostrar todos' : 'Filtrar por likes'}</button>
+        <button onClick={handleFilterDislikes}>{filterByDislikes ? 'Mostrar todos' : 'Filtrar por dislikes'}</button>
       </div>
       <div className="card-list">
         {dogsToDisplay.length === 0 ? (
