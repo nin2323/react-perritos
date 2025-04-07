@@ -16,7 +16,7 @@ export const BreedSelector = (props: BreedSelectorProps) => {
     return (
         <div className="buttons add-button">
         <select value={selectBreed} onChange={onBreedChange}>
-          <option value="">Raza</option>
+          <option value="">Elegir raza</option>
           {breeds.map((breed) => (
             <option key={breed} value={breed}>
               {breed}

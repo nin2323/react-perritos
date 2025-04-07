@@ -24,10 +24,10 @@ export const DogCard = (props: DogProps) => {
           <span className="count-dislike">{dog.countDislike} 🤮</span>
         </div>
         <div className="buttons">
-          <button className="button-like" onClick={() => onAddLike(index)}>
+          <button className="button-like-dislike" onClick={() => onAddLike(index)}>
             Like
           </button>
-          <button className="button-dislike" onClick={() => onAddDislike(index)}>
+          <button className="button-like-dislike" onClick={() => onAddDislike(index)}>
             Dislike
           </button>
         </div>

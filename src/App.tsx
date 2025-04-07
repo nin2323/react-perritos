@@ -2,7 +2,7 @@ import './App.css';
 import { BreedSelector } from './components/breedSelector';
 import { FilterControls } from './components/filterControls';
 import { DogList } from './components/dogList';
-import { useDogLogic } from './hooks/useDoLogic';
+import { useDogLogic } from './hooks/useDogLogic';
 
 function App() {
   const {
@@ -25,6 +25,9 @@ function App() {
 
   return (
     <>
+    <div className='title'>
+      <p>DogList</p>
+    </div>
       <div className="buttons add-button">
         <BreedSelector
           breeds={breeds}
