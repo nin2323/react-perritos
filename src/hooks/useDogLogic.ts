@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getRandomDogImage, getAllBreeds } from "../services/add-dog.service";
 import { DogResponse } from "../services/model/dogs";
+import { ChangeEvent } from "react";
 
 interface Dog {
     imgUrl: string;
@@ -22,11 +23,11 @@ export const useDogLogic = () => {
     getAllBreeds().then(setBreeds);
   }, []);
 
-  const handleBreedChanges = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleBreedChanges = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectBreed(event.target.value);
   };
 
-  const handleFilterChanges = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleFilterChanges = (event: ChangeEvent<HTMLSelectElement>) => {
     const selectedBreed = event.target.value;
     setFilterBreed(selectedBreed);
 
